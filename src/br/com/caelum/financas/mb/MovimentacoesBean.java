@@ -8,8 +8,10 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import br.com.caelum.financas.dao.CategoriaDao;
 import br.com.caelum.financas.dao.ContaDao;
 import br.com.caelum.financas.dao.MovimentacaoDao;
+import br.com.caelum.financas.modelo.Categoria;
 import br.com.caelum.financas.modelo.Conta;
 import br.com.caelum.financas.modelo.Movimentacao;
 import br.com.caelum.financas.modelo.TipoMovimentacao;
@@ -28,7 +30,25 @@ public class MovimentacoesBean implements Serializable {
 	private MovimentacaoDao movimentacaoDao;
 	@Inject
 	private ContaDao contaDao;
+	@Inject
+	private CategoriaDao categoriaDao;
 	
+	private List<Categoria> categorias;
+	
+	public List<Categoria> getCategorias() {
+		if(this.categorias == null)
+		{
+			this.categorias = categoriaDao.lista();
+		}
+		return this.categorias;
+	}
+
+
+	public void setCategorias(List<Categoria> categorias) {
+		this.categorias = categorias;
+	}
+
+
 	public void grava() {
 		System.out.println("Fazendo a gravacao da movimentacao");
 		movimentacao.setConta(getRelatedConta());
@@ -96,5 +116,14 @@ public class MovimentacoesBean implements Serializable {
 	public Conta getRelatedConta()
 	{
 		return contaDao.busca(contaId);
+	}
+	
+	public void adicionaCategoria()
+	{
+		if(this.categoriaId!=null && this.categoriaId>0)
+		{
+			Categoria categoria = categoriaDao.procura(this.categoriaId);
+			this.movimentacao.getCategorias().add(categoria);
+		}
 	}
 }

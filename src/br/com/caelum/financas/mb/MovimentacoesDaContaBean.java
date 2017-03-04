@@ -1,9 +1,12 @@
 package br.com.caelum.financas.mb;
 
 import java.util.List;
+
+import br.com.caelum.financas.dao.MovimentacaoDao;
 import br.com.caelum.financas.modelo.Conta;
 import br.com.caelum.financas.modelo.Movimentacao;
 import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 
 @Named
@@ -12,9 +15,11 @@ public class MovimentacoesDaContaBean {
 
 	private List<Movimentacao> movimentacoes;
 	private Conta conta = new Conta();
+	@Inject
+	MovimentacaoDao dao;
 	
 	public void lista() {
-
+		movimentacoes = dao.getMovimentacaoByConta(getConta());
 	}
 
 	public List<Movimentacao> getMovimentacoes() {

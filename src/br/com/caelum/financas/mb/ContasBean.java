@@ -6,6 +6,7 @@ import java.util.List;
 import br.com.caelum.financas.dao.ContaDao;
 import br.com.caelum.financas.modelo.Conta;
 
+import javax.ejb.ApplicationException;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -28,7 +29,8 @@ public class ContasBean implements Serializable {
 	public void setConta(Conta conta) {
 		this.conta = conta;
 	}
-
+	
+		
 	public void grava() {
 		System.out.println("Gravando a conta");
 		if(conta.getId()!=null)
