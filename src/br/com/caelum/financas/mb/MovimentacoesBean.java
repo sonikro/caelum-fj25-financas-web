@@ -52,7 +52,8 @@ public class MovimentacoesBean implements Serializable {
 	public void grava() {
 		System.out.println("Fazendo a gravacao da movimentacao");
 		movimentacao.setConta(getRelatedConta());
-		movimentacaoDao.adiciona(movimentacao);
+		//getRelatedConta().getMovimentacoes().add(movimentacao);
+		movimentacaoDao.adiciona(movimentacao);		
 		movimentacoes = movimentacaoDao.lista();
 		limpaFormularioDoJSF();
 	}

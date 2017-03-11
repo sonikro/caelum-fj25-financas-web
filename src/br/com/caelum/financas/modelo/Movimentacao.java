@@ -6,17 +6,19 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
-@Entity
+@Entity @Cacheable
 public class Movimentacao implements Serializable {
  
 	private static final long serialVersionUID = 1L;
@@ -28,10 +30,10 @@ public class Movimentacao implements Serializable {
 	private Calendar data;
 	private BigDecimal valor;
 	
-	@ManyToOne 
+	@ManyToOne
 	private Conta conta;
-	
-	@ManyToMany()
+
+	@ManyToMany
 	private List<Categoria> categorias = new ArrayList();
 	
 	public List<Categoria> getCategorias() {

@@ -6,6 +6,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -19,21 +20,20 @@ import br.com.caelum.financas.modelo.ValorPorMesEAno;
 
 @Stateless
 public class MovimentacaoDao {
-	@PersistenceContext
+	@Inject
 	EntityManager manager;
 	
 
 	public void adiciona(Movimentacao movimentacao) {
+		manager.joinTransaction();
 		this.manager.persist(movimentacao);
 		
-		
+		movimentacao.getConta().getMovimentacoes().add(movimentacao);
 		if(movimentacao.getValor().signum() == -1)
 		{
 			//throw new RuntimeException("Movimentação Negativa");
 			throw new ValorInvalidoException("Movimentação Negativa");
-		}
-
-		
+		}		
 	}
 
 	public Movimentacao busca(Integer id) {
@@ -96,6 +96,13 @@ public class MovimentacaoDao {
 				+ " order by sum(m.valor) desc", ValorPorMesEAno.class);
 		query.setParameter("conta", conta);
 		query.setParameter("tipo", tipo);
+		return query.getResultList();
+	}
+	
+	public List<Movimentacao> listaComCategorias()
+	{
+		Query query = this.manager.createQuery("select distinct m from "+Movimentacao.class.getSimpleName()+""
+				+ " m left join fetch m.categorias", Movimentacao.class);
 		return query.getResultList();
 	}
 
